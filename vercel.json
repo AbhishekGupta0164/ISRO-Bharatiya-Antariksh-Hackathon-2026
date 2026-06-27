@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "econav-ai",
+  "builds": [
+    {
+      "src": "apps/frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "apps/frontend/dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "apps/frontend/dist/$1"
+    }
+  ],
+  "outputDirectory": "apps/frontend/dist",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build --prefix apps/frontend",
+  "framework": "vite"
+}
