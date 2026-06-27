@@ -1,0 +1,106 @@
+spec_version: 1
+name: econav-exposure-credit
+description: >
+  AI Environmental Decision Intelligence — an RL environment where an agent
+  navigates an Indian city network making sequential routing decisions to
+  minimise pollution exposure and maximize Exposure Credits.  Uses real-time
+  AQI data from Open-Meteo to compute rewards.  The agent must balance
+  distance, air quality, and an exposure-credit budget across episodes of
+  increasing difficulty.
+
+type: standard
+port: 7860
+
+runtime:
+  framework: fastapi
+  python_version: "3.10"
+
+observation_space:
+  type: dict
+  fields:
+    current_city:
+      type: string
+      description: "Current city code (e.g. 'A' for Delhi)"
+    destination:
+      type: string
+      description: "Target destination city code"
+    visited:
+      type: list
+      items: string
+      description: "List of already-visited city codes"
+    neighbors:
+      type: list
+      items:
+        type: dict
+        fields:
+          city: {type: string}
+          distance: {type: float}
+          aqi: {type: int}
+          grade: {type: string}
+          credit_delta: {type: int}
+      description: "Available neighboring cities with AQI and credit info"
+    exposure_credits:
+      type: int
+      description: "Current credit balance (starts at 100)"
+    total_exposure:
+      type: float
+      description: "Cumulative pollution exposure so far"
+    steps_taken:
+      type: int
+      description: "Number of steps taken in this episode"
+    max_steps:
+      type: int
+      description: "Maximum allowed steps for this task"
+
+action_space:
+  type: string
+  description: "City code to move to (must be a valid neighbor)"
+
+reward:
+  description: >
+    Composite reward = credit_delta (AQI-grade based: +10 to -25) +
+    distance_penalty + destination_bonus(+100) + eco_bonus(+5).
+    The agent earns credits traversing clean-air segments and loses
+    credits in polluted areas.
+
+tasks:
+  - id: easy_route
+    name: "Easy — Delhi to Kolkata (direct)"
+    description: "Navigate from Delhi(A) to Kolkata(F) with generous step budget."
+    difficulty: easy
+    start: A
+    destination: F
+    max_steps: 15
+    passing_score: 0.5
+
+  - id: medium_route
+    name: "Medium — Delhi to Kolkata (tight budget)"
+    description: "Same route but with fewer steps and credit-aware scoring."
+    difficulty: medium
+    start: A
+    destination: F
+    max_steps: 8
+    passing_score: 0.6
+
+  - id: hard_pollution_dodge
+    name: "Hard — Agra to Kolkata (dodge pollution)"
+    description: "Start from high-pollution Agra, reach Kolkata, maximize credits."
+    difficulty: hard
+    start: C
+    destination: F
+    max_steps: 6
+    passing_score: 0.7
+
+  - id: expert_credit_max
+    name: "Expert — Maximize credits Delhi→Kolkata"
+    description: "Reach destination AND end with maximum possible exposure credits."
+    difficulty: expert
+    start: A
+    destination: F
+    max_steps: 10
+    passing_score: 0.8
+
+grading:
+  description: >
+    Score 0.0-1.0 based on: (1) reaching destination, (2) final credit
+    balance, (3) exposure minimization, (4) step efficiency.

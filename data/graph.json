@@ -1,0 +1,130 @@
+{
+  "cities": {
+    "A": {
+      "name": "Delhi",
+      "lat": 28.6139,
+      "lng": 77.209
+    },
+    "B": {
+      "name": "Jaipur",
+      "lat": 26.9124,
+      "lng": 75.7873
+    },
+    "C": {
+      "name": "Agra",
+      "lat": 27.1767,
+      "lng": 78.0081
+    },
+    "D": {
+      "name": "Varanasi",
+      "lat": 25.3176,
+      "lng": 82.9739
+    },
+    "E": {
+      "name": "Lucknow",
+      "lat": 26.8467,
+      "lng": 80.9462
+    },
+    "F": {
+      "name": "Kolkata",
+      "lat": 22.5726,
+      "lng": 88.3639
+    },
+    "G": {
+      "name": "jabalpur",
+      "lat": 23.1701522,
+      "lng": 79.9324505
+    },
+    "H": {
+      "name": "katni",
+      "lat": 23.7176393,
+      "lng": 80.2610181
+    }
+  },
+  "roads": [
+    {
+      "from": "A",
+      "to": "B",
+      "distance": 235.3,
+      "pollution": 10
+    },
+    {
+      "from": "A",
+      "to": "C",
+      "distance": 178.1,
+      "pollution": 3
+    },
+    {
+      "from": "B",
+      "to": "D",
+      "distance": 739.0,
+      "pollution": 2
+    },
+    {
+      "from": "C",
+      "to": "D",
+      "distance": 536.6,
+      "pollution": 6
+    },
+    {
+      "from": "C",
+      "to": "E",
+      "distance": 293.4,
+      "pollution": 1
+    },
+    {
+      "from": "D",
+      "to": "E",
+      "distance": 264.4,
+      "pollution": 2
+    },
+    {
+      "from": "D",
+      "to": "F",
+      "distance": 627.0,
+      "pollution": 8
+    },
+    {
+      "from": "E",
+      "to": "F",
+      "distance": 887.0,
+      "pollution": 1
+    },
+    {
+      "from": "G",
+      "to": "D",
+      "distance": 390.0,
+      "pollution": 6
+    },
+    {
+      "from": "G",
+      "to": "E",
+      "distance": 421.4,
+      "pollution": 4
+    },
+    {
+      "from": "G",
+      "to": "C",
+      "distance": 485.8,
+      "pollution": 6
+    },
+    {
+      "from": "H",
+      "to": "G",
+      "distance": 69.5,
+      "pollution": 4
+    },
+    {
+      "from": "H",
+      "to": "D",
+      "distance": 327.1,
+      "pollution": 7
+    },
+    {
+      "from": "H",
+      "to": "E",
+      "distance": 354.7,
+      "pollution": 6
+    }
+  ]
+}

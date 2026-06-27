@@ -1,0 +1,36 @@
+[project]
+name = "econav-ai"
+version = "0.1.0"
+description = "EcoNav AI - health-aware routing for lower pollution exposure"
+authors = [
+    { name = "EcoNav AI Team" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn>=0.30",
+    "requests>=2.32",
+    "pydantic>=2.7",
+    "numpy>=1.26",
+    "openai>=1.0.0",
+    "openenv-core>=0.2.0",
+]
+
+[project.scripts]
+server = "server.app:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/test_pipeline.py" = ["E402"]

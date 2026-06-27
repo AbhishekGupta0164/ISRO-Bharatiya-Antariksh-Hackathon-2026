@@ -1,0 +1,5 @@
+-r base.txt
+fastapi>=0.111
+uvicorn>=0.30
+requests>=2.32
+torch>=2.2

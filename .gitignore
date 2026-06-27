@@ -1,0 +1,71 @@
+<<<<<<< HEAD
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage
+
+# Turbo
+.turbo
+
+# Vercel
+.vercel
+
+# Build Outputs
+.next/
+out/
+build
+dist
+
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+*.pem
+.venv
+.venv/
+__pycache__/
+*.pyc
+*.pkl
+models/eco_model.pth
+=======
+.venv/
+.venv*/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.exe
+*.dll
+*.bin
+node_modules/
+.env
+dist/
+<<<<<<< HEAD
+>>>>>>> 1c2f25b401a67215ea459ece945cb72cc7dbd373
+=======
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.turbo/
+.DS_Store
+# Avoid absolute binary rejects by HF if needed, but keep common assets
+# apps/frontend/hero-bg.png # This was specifically rejected
+>>>>>>> 448c73b (chore: purge accidentally tracked binaries and update gitignore)
