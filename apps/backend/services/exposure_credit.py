@@ -24,6 +24,7 @@ from apps.backend.services.aqi_service import (
     _cache,
     fetch_city_aqi,
 )
+from apps.backend.services.satellite_aqi_service import satellite_service
 
 # ---------------------------------------------------------------------------
 # Credit config
@@ -189,6 +190,24 @@ def get_grade_for_aqi(aqi: int) -> dict:
 
 def grade_city(city_code: str) -> CityGrade | None:
     """Grade a city based on its current AQI."""
+    if "," in city_code:
+        try:
+            lat, lon = map(float, city_code.split(","))
+            aqi_val = satellite_service.get_aqi_for_coords(lat, lon)
+            g = get_grade_for_aqi(aqi_val)
+            return CityGrade(
+                city_code=city_code,
+                city_name=f"Grid ({lat:.2f}, {lon:.2f})",
+                aqi=aqi_val,
+                grade=g["grade"],
+                grade_label=g["label"],
+                emoji=g["emoji"],
+                credit_delta=g["credits"],
+                color=g["color"],
+            )
+        except Exception:
+            return None
+
     aqi_data = _cache.data.get(city_code) or fetch_city_aqi(city_code)
     if not aqi_data:
         return None
@@ -207,14 +226,27 @@ def grade_city(city_code: str) -> CityGrade | None:
 
 def grade_segment(from_code: str, to_code: str, distance: float = 0) -> SegmentCredit:
     """Calculate credit delta for a route segment between two cities."""
-    aqi_from = _cache.data.get(from_code)
-    aqi_to = _cache.data.get(to_code)
+    if "," in from_code:
+        try:
+            lat, lon = map(float, from_code.split(","))
+            from_aqi = satellite_service.get_aqi_for_coords(lat, lon)
+        except Exception:
+            from_aqi = 100
+    else:
+        aqi_from = _cache.data.get(from_code) or fetch_city_aqi(from_code)
+        from_aqi = aqi_from.aqi if aqi_from else 100
 
-    from_aqi = aqi_from.aqi if aqi_from else 100
-    to_aqi = aqi_to.aqi if aqi_to else 100
+    if "," in to_code:
+        try:
+            lat, lon = map(float, to_code.split(","))
+            to_aqi = satellite_service.get_aqi_for_coords(lat, lon)
+        except Exception:
+            to_aqi = 100
+    else:
+        aqi_to = _cache.data.get(to_code) or fetch_city_aqi(to_code)
+        to_aqi = aqi_to.aqi if aqi_to else 100
+
     avg_aqi = max(from_aqi, to_aqi) # Maximize exposure risk instead of averaging
-
-
     g = get_grade_for_aqi(avg_aqi)
 
     return SegmentCredit(

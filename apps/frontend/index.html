@@ -213,9 +213,20 @@
                     </div>
                     
                     <!-- Map Card -->
-                    <div class="glass map-card">
+                    <div class="glass map-card" style="position: relative;">
                         <h3 style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">🌍 Real-World Map</h3>
-                        <div id="map" style="height: 100%; min-height: 400px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"></div>
+                        <div id="map" style="height: 100%; min-height: 400px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); position: relative;">
+                            <!-- Floating Layer Control -->
+                            <div style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px; color: #fff; font-size: 11px; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                                <div style="font-weight: bold; margin-bottom: 2px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; display: flex; align-items: center; gap: 4px;">🛰️ Satellite Layers</div>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #e2e8f0;">
+                                    <input type="checkbox" id="layer-pm25-heatmap" checked style="accent-color: #10b981;"> PM2.5 Grid Heatmap
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #e2e8f0;">
+                                    <input type="checkbox" id="layer-hcho-hotspots" checked style="accent-color: #ef4444;"> HCHO Hotspot Polygons
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
@@ -252,8 +263,20 @@
                 </div>
             </div>
 
-            <div class="aqi-grid" id="aqi-container">
+            <div class="aqi-grid" id="aqi-container" style="margin-bottom: 2rem;">
                 <!-- City Cards injected here via JS -->
+            </div>
+
+            <!-- CPCB Ground Validation Card -->
+            <div class="solid-card" id="validation-card" style="padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(16,185,129,0.15); background: rgba(4, 8, 20, 0.95); margin-bottom: 2rem;">
+                <h3 style="margin-top: 0; margin-bottom: 1rem; color: #10b981; display: flex; align-items: center; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    CPCB Ground Validation Report
+                </h3>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 1.5rem;">This matrix matches the nearest grid predictions of GWR and CNN-LSTM models against live ground truth stations retrieved from CPCB via OpenAQ API v3 (India).</p>
+                <div id="validation-report-table" style="font-family: monospace; font-size: 0.9rem; color: #e2e8f0; overflow-x: auto; background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); white-space: pre-wrap; line-height: 1.4;">
+                    Loading ground truth validation metrics...
+                </div>
             </div>
         </section>
 

@@ -23,6 +23,103 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/
 document.getElementById('map').style.background = '#000';
 document.querySelector('#map .leaflet-tile-pane').style.filter = 'brightness(0.35) saturate(0.8) contrast(1.4)';
 
+// Initialize Satellite Layers FeatureGroups
+window.pm25HeatmapLayer = L.featureGroup().addTo(map);
+window.hchoHotspotsLayer = L.featureGroup().addTo(map);
+
+async function updateSatelliteLayers() {
+    const showPm25 = document.getElementById('layer-pm25-heatmap').checked;
+    const showHcho = document.getElementById('layer-hcho-hotspots').checked;
+    
+    // Update PM2.5 Grid Heatmap
+    window.pm25HeatmapLayer.clearLayers();
+    if (showPm25) {
+        try {
+            const res = await fetch('/api/v1/satellite/pm25-grid');
+            if (res.ok) {
+                const data = await res.json();
+                const grid = data.grid || [];
+                const resDeg = data.resolution || 0.5;
+                const halfRes = resDeg / 2;
+                
+                grid.forEach(cell => {
+                    const bounds = [
+                        [cell.lat - halfRes, cell.lon - halfRes],
+                        [cell.lat + halfRes, cell.lon + halfRes]
+                    ];
+                    
+                    let color = '#10b981'; // green
+                    if (cell.aqi > 50) color = '#f59e0b'; // yellow
+                    if (cell.aqi > 100) color = '#f97316'; // orange
+                    if (cell.aqi > 150) color = '#ef4444'; // red
+                    if (cell.aqi > 200) color = '#a855f7'; // purple
+                    if (cell.aqi > 300) color = '#7f1d1d'; // maroon
+                    
+                    const rect = L.rectangle(bounds, {
+                        fillColor: color,
+                        fillOpacity: 0.35,
+                        weight: 0.5,
+                        color: 'rgba(255,255,255,0.08)',
+                        stroke: true
+                    });
+                    
+                    rect.bindPopup(`
+                        <div style="font-family: sans-serif; font-size:11px; color:#1e293b;">
+                            <strong>🛰️ Satellite Grid Cell</strong><br>
+                            Lat: ${cell.lat.toFixed(2)} | Lon: ${cell.lon.toFixed(2)}<br>
+                            PM2.5: <span style="font-weight:bold;">${cell.pm25.toFixed(1)} ug/m³</span><br>
+                            AQI: <span style="font-weight:bold; color:${color}">${cell.aqi}</span>
+                        </div>
+                    `);
+                    window.pm25HeatmapLayer.addLayer(rect);
+                });
+            }
+        } catch (e) {
+            console.error("Failed fetching satellite PM2.5 grid", e);
+        }
+    }
+    
+    // Update HCHO Hotspots
+    window.hchoHotspotsLayer.clearLayers();
+    if (showHcho) {
+        try {
+            const res = await fetch('/api/v1/satellite/hotspots');
+            if (res.ok) {
+                const data = await res.json();
+                const hotspots = data.hotspots || [];
+                
+                hotspots.forEach(hs => {
+                    const circle = L.circle([hs.centroid_lat, hs.centroid_lon], {
+                        radius: 60000, // 60 km
+                        color: '#ef4444',
+                        weight: 2,
+                        fillColor: '#dc2626',
+                        fillOpacity: 0.22,
+                        dashArray: '5, 5'
+                    });
+                    
+                    circle.bindTooltip(`
+                        <strong>🔥 HCHO Hotspot Cluster ${hs.id}</strong><br>
+                        Centroid: (${hs.centroid_lat.toFixed(2)}, ${hs.centroid_lon.toFixed(2)})<br>
+                        Cells Grouped: ${hs.cell_count}<br>
+                        Mean HCHO: ${hs.mean_hcho.toExponential(2)} mol/cm²
+                    `, { sticky: true });
+                    window.hchoHotspotsLayer.addLayer(circle);
+                });
+            }
+        } catch (e) {
+            console.error("Failed fetching HCHO hotspots", e);
+        }
+    }
+}
+
+// Attach event listeners and do initial load
+const checkPm25 = document.getElementById('layer-pm25-heatmap');
+const checkHcho = document.getElementById('layer-hcho-hotspots');
+if (checkPm25) checkPm25.addEventListener('change', updateSatelliteLayers);
+if (checkHcho) checkHcho.addEventListener('change', updateSatelliteLayers);
+setTimeout(updateSatelliteLayers, 800);
+
 let currentRouteLayer = null;
 let currentShortestRouteLayer = null;
 let shortestRouteControlMain = null;
@@ -1131,6 +1228,20 @@ async function loadAqiData() {
                     plugins: { legend: { display: false } }
                 }
             });
+        }
+        
+        // Fetch CPCB validation report
+        try {
+            const vRes = await fetch('/api/v1/satellite/validation');
+            if (vRes.ok) {
+                const vData = await vRes.json();
+                const reportDiv = document.getElementById('validation-report-table');
+                if (reportDiv) {
+                    reportDiv.textContent = vData.report;
+                }
+            }
+        } catch (vErr) {
+            console.error("Failed to load validation report", vErr);
         }
         
         window.aqiLoaded = true;

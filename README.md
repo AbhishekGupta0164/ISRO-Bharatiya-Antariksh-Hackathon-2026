@@ -14,19 +14,21 @@ pinned: true
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenEnv Compliant](https://img.shields.io/badge/OpenEnv-Compliant-10b981)](https://github.com/OpenEnv/spec)
 
-EcoNav AI is an **intelligent routing platform** and Reinforcement Learning (RL) environment built for the **Meta AI Environmental Decision Intelligence Hackathon**. It empowers users and agents to navigate urban networks while minimizing pollution exposure and maximizing health "Exposure Credits."
+EcoNav AI is an **advanced satellite-driven environmental intelligence platform** built for the **ISRO Bharatiya Antariksh Hackathon 2026 (PS-3)**. It aggregates multi-sensor satellite products to predict ground-level PM2.5, clusters formaldehyde (HCHO) hotspots to trace agricultural burning, validates predictions against CPCB monitors, and offers a downstream multi-objective routing app that minimizes pollution exposure.
 
 ---
 
 ## 🌍 Project Overview
 
-EcoNav AI transforms navigation from a simple distance-minimization problem into a **multi-objective environmental optimization task**. By integrating real-time Air Quality Index (AQI) data with dynamic traffic simulations, the platform provides a realistic testing ground for eco-aware agents.
+EcoNav AI transforms environmental decision intelligence from a weather forecast blend into a **satellite-observed, validated spatial forecasting system**. By integrating satellite columns, meteorological parameters, and ground observations, the platform estimates real-time PM2.5 at 0.1° (~10km) resolution across India.
 
 ### Key Innovations:
-- **Live AQI Integration**: Real-time pollution data fetched from the Open-Meteo API for 50+ network nodes across India.
-- **Exposure Credits**: A gamified health currency that penalizes high-pollution segments (Grade F) and rewards clean-air segments (Grade A).
-- **Dynamic Traffic Engine**: Simulates congestion levels that impact both travel time and localized pollution exposure.
-- **OpenEnv Compliance**: Fully compatible with the OpenEnv specification for RL evaluation and agent deployment.
+- **INSAT-3D AOD Pipeline**: Real-time FTP downloading and h5py processing of Aerosol Optical Depth from MOSDAC.
+- **Copernicus TROPOMI Gridder**: Automates querying Sentinel-5P catalogs (HCHO, NO2, SO2, CO) and gridding column densities to a 0.1° bbox grid.
+- **CNN-LSTM Temporal Predictor**: A deep learning architecture mapping 14-day history of AOD + tropospheric gases + meteorology to surface PM2.5.
+- **HCHO Hotspot Clustered Avoidance**: DBSCAN spatial clustering identifies seasonal agricultural (e.g., Punjab stubble) and forest fires (e.g., Odisha), generating polygons bypassed by routing.
+- **NASA FIRMS Fire Correlation**: Links active fires within 50km to HCHO anomalies with lag cross-correlation checks.
+- **CPCB Validation Engine**: Ground truth verification reporting RMSE, MAE, and R² scores utilizing OpenAQ API v3.
 
 ---
 
@@ -154,8 +156,8 @@ We maintain high code quality standards through automated linting and formatting
 |---|---|
 | **CI/CD Pipeline** | Passing ✅ |
 | **OpenEnv Spec** | Compliant (v1.0) 🟢 |
-| **Real-time Data** | Active (Open-Meteo) 🛰️ |
-| **Model Version** | EcoScorer v2.1 🧠 |
+| **Real-time Data** | Active (MOSDAC INSAT-3D + Copernicus TROPOMI) 🛰️ |
+| **Model Version** | SatAQI CNN-LSTM v1.0 🧠 |
 
 ---
 
