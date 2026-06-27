@@ -10,7 +10,7 @@ pinned: true
 
 # 🌱 EcoNav AI — Exposure Credit Platform
 
-[![EcoNav CI/CD](https://github.com/hitendras510/EcoNav-AI/actions/workflows/main.yml/badge.svg)](https://github.com/hitendras510/EcoNav-AI/actions)
+[![EcoNav CI/CD](https://github.com/AbhishekGupta0164/ISRO---Bharatiya-Antariksh-Hackathon-2026/actions/workflows/main.yml/badge.svg)](https://github.com/AbhishekGupta0164/ISRO---Bharatiya-Antariksh-Hackathon-2026/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![OpenEnv Compliant](https://img.shields.io/badge/OpenEnv-Compliant-10b981)](https://github.com/OpenEnv/spec)
 
@@ -44,7 +44,7 @@ The project is architected as a modern **monorepo** for seamless development and
 ## 📂 Repository Structure
 
 ```text
-EcoNav-AI/
+ISRO---Bharatiya-Antariksh-Hackathon-2026/
 ├── apps/
 │   ├── backend/         # FastAPI server, AI services, and RL endpoints
 │   ├── frontend/        # Vite-powered dashboard and mapping interface
@@ -72,8 +72,8 @@ EcoNav-AI/
 ### Quick Start (Recommended)
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/hitendras510/EcoNav-AI.git
-   cd EcoNav-AI
+   git clone https://github.com/AbhishekGupta0164/ISRO---Bharatiya-Antariksh-Hackathon-2026.git
+   cd ISRO---Bharatiya-Antariksh-Hackathon-2026
    ```
 
 2. **Install Dependencies**:

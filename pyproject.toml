@@ -3,7 +3,7 @@ name = "econav-ai"
 version = "0.1.0"
 description = "EcoNav AI - health-aware routing for lower pollution exposure"
 authors = [
-    { name = "EcoNav AI Team" }
+    { name = "AbhishekGupta0164" }
 ]
 requires-python = ">=3.10"
 dependencies = [

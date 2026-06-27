@@ -60,5 +60,5 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git remote add hf https://hitendras510:$HF_TOKEN@huggingface.co/spaces/hitendras510/EcoNav-AI
+          git remote add hf https://AbhishekGupta0164:$HF_TOKEN@huggingface.co/spaces/AbhishekGupta0164/EcoNav-AI
           git push --force hf main
