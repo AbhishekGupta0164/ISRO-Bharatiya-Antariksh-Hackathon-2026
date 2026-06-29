@@ -1,0 +1,44 @@
+[project]
+name = "vayunetra"
+version = "0.1.0"
+description = "VayuNetra - satellite-driven surface AQI estimation and routing platform"
+authors = [
+    { name = "AbhishekGupta0164" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn>=0.30",
+    "requests>=2.32",
+    "pydantic>=2.7",
+    "numpy>=1.26",
+    "openai>=1.0.0",
+    "openenv-core>=0.2.0",
+    "torch>=2.2.0",
+    "scikit-learn>=1.4.0",
+    "h5py>=3.10.0",
+    "xarray>=2024.1.0",
+    "netCDF4>=1.6.5",
+    "pandas>=2.2.0",
+    "scipy>=1.12.0",
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+server = "server.app:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/test_pipeline.py" = ["E402"]

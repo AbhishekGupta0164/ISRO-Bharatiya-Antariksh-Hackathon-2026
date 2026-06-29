@@ -1,0 +1,4 @@
+-r base.txt
+torch>=2.2
+scikit-learn>=1.4
+openai>=1.0.0

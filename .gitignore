@@ -1,0 +1,54 @@
+# Node dependencies
+node_modules/
+.npmrc
+package-lock.json
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+.venv*/
+
+# Python caches and binaries
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.turbo/
+.vercel/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environments and Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# Local Data / Temporary Databases
+data/satellite/
+data/wallets.json
+*.nc
+*.h5
+*.log
+server_log.txt
+
+# Temporary Agent/Brain Logs
+scratch/
+.gemini/

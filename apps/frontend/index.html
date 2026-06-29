@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VayuNetra | वायु नेत्र — ISRO Antariksh Hackathon 2026</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar glass premium-sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
+            <div>
+                <div class="sidebar-logo-name" style="font-family:'Outfit', sans-serif; font-weight:800; font-size:1.35rem; color:#fff; letter-spacing:-0.5px;">Vayu<span style="color:#ff6b2b;">Netra</span></div>
+                <div class="sidebar-logo-sub" style="font-size:0.65rem; color:#94a3b8; font-weight:500; letter-spacing:0.3px; margin-top:2px;">वायु नेत्र · Team AKAH</div>
+            </div>
+        </div>
+
+        <div class="sidebar-status">
+            <span class="pulse"></span>
+            <span style="color:#94a3b8; font-size:12px; margin-right:4px;">Backend:</span>
+            <span class="status-pill">Online</span>
+        </div>
+
+        <div class="quick-stats border-box premium-stats">
+            <h5 class="stats-header">Quick Stats</h5>
+            <div class="stat-row">
+                <span>Cities</span> <span class="stat-val">50+</span>
+            </div>
+            <div class="stat-row">
+                <span>Model</span> <span class="stat-highlight">Eco Scorer</span>
+            </div>
+            <div class="stat-row">
+                <span>Live Mode</span> <span class="stat-highlight">Enabled</span>
+            </div>
+        </div>
+
+        <nav class="nav-links sidebar-nav premium-nav">
+            <button class="nav-btn active" id="btn-home">
+                <span class="nav-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                <span>Home &amp; Overview</span>
+            </button>
+            <button class="nav-btn" id="btn-route">
+                <span class="nav-btn-icon" style="color:#38bdf8;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>
+                <span>Eco Routing</span>
+            </button>
+            <button class="nav-btn" id="btn-traffic">
+                <span class="nav-btn-icon" style="color:#fbbf24;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></span>
+                <span>Traffic Engine</span>
+            </button>
+            <button class="nav-btn" id="btn-network">
+                <span class="nav-btn-icon" style="color:#c084fc;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/><path d="M2 12h20"/></svg></span>
+                <span>Route Network</span>
+            </button>
+            <button class="nav-btn" id="btn-aqi">
+                <span class="nav-btn-icon" style="color:#f87171;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12h16"/><path d="M12 12v8"/><path d="M8 16H5a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-3"/></svg></span>
+                <span>Live AQI Matrix</span>
+            </button>
+            <button class="nav-btn" id="btn-tasks">
+                <span class="nav-btn-icon" style="color:#34d399;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
+                <span>RL Tasks</span>
+            </button>
+            <button class="nav-btn" id="btn-ps3" style="border: 1px solid rgba(255, 107, 43, 0.25); background: rgba(255, 107, 43, 0.05); color: #ff6b2b;">
+                <span class="nav-btn-icon" style="color:#ff6b2b;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></span>
+                <span style="font-weight: 600;">🛰️ ISRO PS-3</span>
+            </button>
+        </nav>
+        
+        <div id="global-credit-badge" class="glass credit-box premium-credit-box">
+            <div class="credit-box-header">
+                <span>Daily Credits</span>
+                <div class="credit-info-btn" id="credit-info-toggle" title="How credits work">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+            </div>
+            <div class="credit-val-container">
+                <span id="global-credits-val">1000</span>
+            </div>
+            <div class="credit-reset-label">resets each new day ↻</div>
+            <div class="credit-tooltip">
+                <strong>💳 How Credits Work</strong>
+                Each route through polluted areas costs credits. Higher AQI = more depletion. Your balance of <b style="color:#34d399">1000</b> automatically resets at the start of every new day.
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+        <!-- Home Landing Page -->
+        <section id="view-home" class="animate-in">
+            <div class="hero-colorful" style="position:relative; overflow:hidden; text-align: center; padding: 4rem 2rem; min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 32px; background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(11, 15, 25, 0.95) 70%), #040814; border: 1px solid rgba(16,185,129,0.15); margin-bottom: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);">
+                <!-- Atmospheric glow -->
+                <div style="position:absolute; top:-50%; left:50%; transform:translateX(-50%); width:600px; height:600px; background:radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 60%); filter:blur(60px); pointer-events:none;"></div>
+                
+                <span style="display: inline-block; background: rgba(255, 107, 43, 0.1); border: 1px solid rgba(255, 107, 43, 0.2); color: #ff6b2b; padding: 0.4rem 1.2rem; border-radius: 30px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 2rem; text-transform: uppercase;">🇮🇳 ISRO Antariksh Hackathon 2026 · Team AKAH</span>
+
+                <h1 style="font-size: 4.5rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.1; background: linear-gradient(135deg, #ff6b2b 0%, #ffffff 50%, #ff6b2b 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; filter: drop-shadow(0 4px 15px rgba(255, 107, 43, 0.4));">
+                    VayuNetra Platform
+                </h1>
+                
+                <p style="color:#94a3b8; max-width:650px; margin: 0 auto 3rem; font-size: 1.25rem; line-height: 1.6; font-weight: 400;">
+                    Space-grade surface AQI estimation and HCHO hotspot mapping over India using INSAT-3D and Sentinel-5P satellite observations. Validated against CPCB ground monitors.
+                </p>
+                
+                <div style="display:flex; justify-content:center; gap:1.5rem;">
+                    <button class="btn" onclick="document.getElementById('btn-route').click()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 1rem 2rem; border-radius: 30px; font-size: 1.1rem; font-weight: 600; border: none; cursor: pointer; box-shadow: 0 8px 25px rgba(16,185,129,0.4), inset 0 1px 1px rgba(255,255,255,0.3); transition: all 0.3s ease;">
+                        🌍 Start Routing
+                    </button>
+                    <button class="btn btn-outline" onclick="document.getElementById('btn-traffic').click()" style="background: rgba(255,255,255,0.03); color: #fff; padding: 1rem 2rem; border-radius: 30px; font-size: 1.1rem; font-weight: 500; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; backdrop-filter: blur(10px); transition: all 0.3s ease;">
+                        🚦 Traffic Sim
+                    </button>
+                </div>
+            </div>
+
+            <!-- Benefits Section Header -->
+            <div style="text-align: center; margin-top: 4rem; margin-bottom: 3rem;">
+                <span style="display: inline-block; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.4rem 1.2rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem;">
+                    Everyday Benefits
+                </span>
+                <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Features You'll Actually Use</h2>
+                <p style="color: var(--text-secondary); font-size: 1rem;">Practical tools designed for real-world driving scenarios</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; justify-items: center; max-width: 1200px; margin: 0 auto;">
+                <!-- Feature 1 -->
+                <div class="solid-card" style="background: #121415; border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor:pointer; width: 100%; transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;" onclick="document.getElementById('btn-route').click()" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(16, 185, 129, 0.4), 0 0 25px rgba(16, 185, 129, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.3); backdrop-filter: blur(10px); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </div>
+                    <h3 style="margin-bottom:1rem; font-size: 1.2rem; line-height: 1.4; color: #fff;">Eco-Pathfinding<br>& Routing</h3>
+                    <p style="color:#a1a1aa; font-size:0.85rem; line-height:1.6;">Calculates mathematically proven paths while avoiding high-pollution exposure zones.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="solid-card" style="background: #121415; border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor:pointer; width: 100%; transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;" onclick="document.getElementById('btn-aqi').click()" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(16, 185, 129, 0.4), 0 0 25px rgba(16, 185, 129, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.3); backdrop-filter: blur(10px); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    </div>
+                    <h3 style="margin-bottom:1rem; font-size: 1.2rem; line-height: 1.4; color: #fff;">Live AQI<br>Matrix</h3>
+                    <p style="color:#a1a1aa; font-size:0.85rem; line-height:1.6;">Integrates real-time sensor data across 50+ network locations directly mapped to Open-Meteo.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="solid-card" style="background: #121415; border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor:pointer; width: 100%; transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;" onclick="document.getElementById('btn-traffic').click()" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(16, 185, 129, 0.4), 0 0 25px rgba(16, 185, 129, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.3); backdrop-filter: blur(10px); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                    </div>
+                    <h3 style="margin-bottom:1rem; font-size: 1.2rem; line-height: 1.4; color: #fff;">Dynamic Traffic<br>Engine</h3>
+                    <p style="color:#a1a1aa; font-size:0.85rem; line-height:1.6;">Inject external traffic constraints and simulate how gridlock inflates route exposure risks.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="solid-card" style="background: #121415; border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor:pointer; width: 100%; transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;" onclick="document.getElementById('btn-tasks').click()" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 15px 30px rgba(16, 185, 129, 0.4), 0 0 25px rgba(16, 185, 129, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.5); box-shadow: 0 0 25px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.3); backdrop-filter: blur(10px); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.8));"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    </div>
+                    <h3 style="margin-bottom:1rem; font-size: 1.2rem; line-height: 1.4; color: #fff;">OpenEnv<br>Compliance</h3>
+                    <p style="color:#a1a1aa; font-size:0.85rem; line-height:1.6;">Standardized RL endpoints supporting evaluation definitions and PPO/DQN integration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Route Planner View -->
+        <section id="view-route" class="hidden">
+            <div class="page-header">
+                <p>Select a start and destination city. The AI agent will find the route with the lowest pollution exposure and compare it against the shortest path.</p>
+            </div>
+
+            <!-- Inputs -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="start-node">📍 Start City</label>
+                    <input type="text" id="start-node" class="text-input" placeholder="Search any city... (e.g. Delhi, Mumbai)" value="Delhi">
+                </div>
+                <div class="input-group">
+                    <label for="end-node">📍 Destination City</label>
+                    <input type="text" id="end-node" class="text-input" placeholder="Search any city... (e.g. Kolkata, Pune)" value="Kolkata">
+                </div>
+
+            </div>
+            
+            <!-- Hidden traffic slider for normal view (default 1.0) -->
+            <input type="hidden" id="traffic-level-hidden" value="1.0">
+
+            <button id="submit-route" class="btn full-width mt-1">
+                🔍 Find Eco-Route
+            </button>
+            
+            <div id="route-loading" class="loader hidden"></div>
+            <div id="route-error" style="color: #ef4444; font-size: 14px; margin-top: 1rem;" class="hidden"></div>
+
+            <!-- Results -->
+            <div class="results-area hidden mt-2" id="route-results">
+                <div class="content-grid">
+                    
+                    <!-- Route Analysis Card -->
+                    <div class="glass analysis-card">
+                        <h3 style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">🏆 Select Your Route</h3>
+                        
+                        <div id="route-alternatives-container" style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <!-- Dynamically injected via JS -->
+                        </div>
+                        
+                        <div id="credit-summary-container" style="margin-bottom: 1rem; padding: 1rem; border-radius: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); display: none;">
+                            <!-- Injected via JS -->
+                        </div>
+
+                        <div class="info-banner" id="info-banner-text">
+                            ℹ️ Green paths prioritize health; Red paths prioritize distance; Orange balance both.
+                        </div>
+                    </div>
+                    
+                    <!-- Map Card -->
+                    <div class="glass map-card">
+                        <h3 style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">🌍 Real-World Map</h3>
+                        <div id="map" style="height: 100%; min-height: 400px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"></div>
+                    </div>
+                    
+                </div>
+                
+                <!-- ROUTE SEGMENT CHART -->
+                <div class="glass" id="route-segment-chart-card" style="margin-top: 1.5rem; padding: 1.5rem; border-radius: 20px; display: none;">
+                    <h3 style="margin-bottom: 1rem;">📊 Segment Exposure Risk Analysis</h3>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="routeSegmentChart"></canvas>
+                    </div>
+                    
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Route Segment Details</h4>
+                    <div id="segment-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live AQI Matrix  -->
+        <section id="view-aqi" class="hidden">
+            <div class="hero" style="padding: 2rem 0;">
+                <h2>Real-Time Pollution Grid</h2>
+                <p>Live sensors analyzing exposure risks across 50+ network locations.</p>
+            </div>
+            
+            <div id="aqi-loading" class="loader"></div>
+            
+            <!-- AQI BAR CHART -->
+            <div class="solid-card" id="aqi-chart-card" style="margin-bottom: 2rem; padding: 1.5rem; border-radius: 20px; display: none;">
+                <h3 style="margin-top: 0; margin-bottom: 1rem;">📊 AQI Comparison Overview</h3>
+                <div style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="aqiChart"></canvas>
+                </div>
+            </div>
+
+            <div class="aqi-grid" id="aqi-container">
+                <!-- City Cards injected here via JS -->
+            </div>
+        </section>
+
+        <!-- Traffic Engine Simulator -->
+        <section id="view-traffic" class="hidden">
+            <div class="page-header">
+                <p>🚦 Simulate traffic congestion to observe dynamic impact on live AQI parameters and agent routing decisions.</p>
+            </div>
+            
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="traffic-start">📍 Start City</label>
+                    <input type="text" id="traffic-start" class="text-input" placeholder="Search any city... (e.g. Delhi, Mumbai)" value="Delhi">
+                </div>
+                <div class="input-group">
+                    <label for="traffic-end">📍 Destination City</label>
+                    <input type="text" id="traffic-end" class="text-input" placeholder="Search any city... (e.g. Kolkata, Pune)" value="Kolkata">
+                </div>
+            </div>
+
+            <div class="input-group slider-group">
+                <label for="traffic-level-sim" style="display:flex; justify-content:space-between;">
+                    <span>Traffic Congestion Level</span>
+                    <span id="traffic-val-sim" style="color:var(--accent-primary); font-weight:bold;">1.0x</span>
+                </label>
+                <input type="range" id="traffic-level-sim" min="0.5" max="3.0" step="0.1" value="1.0">
+                <div style="display:flex; justify-content:space-between; font-size:11px; margin-top:0.25rem;">
+                    <span>Clear (0.5x)</span>
+                    <span>Gridlock (3.0x)</span>
+                </div>
+            </div>
+
+            <button id="submit-traffic" class="btn full-width mt-1">
+                🚦 Simulate Traffic Route
+            </button>
+            <div id="traffic-error" style="color: #ef4444; font-size: 14px; margin-top: 1rem;" class="hidden"></div>
+            
+            <div id="traffic-results" class="hidden mt-2">
+                <div class="glass analysis-card" style="margin-bottom: 2rem; position: relative; overflow: hidden;">
+                    <!-- Traffic warning banner embedded in card -->
+                    <div id="traffic-warning-banner" style="position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent-primary);"></div>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem;">
+                        <h3 style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">📈 Traffic Run Analysis <span id="traffic-multiplier-badge" style="font-size:0.75rem; background:rgba(255,255,255,0.1); padding:0.2rem 0.5rem; border-radius:12px;"></span></h3>
+                        <div style="text-align:right;">
+                            <div id="traffic-res-time" style="font-size: 1.5rem; font-weight: 700; color: #fff;">-- hrs</div>
+                            <div style="font-size: 0.8rem; color: #94a3b8;" id="traffic-res-speed">Avg Speed: -- km/h</div>
+                        </div>
+                    </div>
+                    <div class="card-inner">
+                        <div class="pill-container" style="margin-bottom: 1.5rem;">
+                            <span class="pill outline" id="traffic-res-dist">Distance: ...</span>
+                            <span class="pill outline" id="traffic-res-base-exp" style="border-color:#10b981; color:#10b981; opacity:0.8;">Base Exp: ...</span>
+                            <span class="pill" id="traffic-res-exp" style="border-color:#f59e0b; color:#f59e0b; font-weight:bold;">Traffic Exp: ...</span>
+                        </div>
+                        
+                        <h4 style="font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:1px;">Route Summary & Exposure Credits</h4>
+                        <div id="traffic-credit-summary" style="margin-bottom: 1.5rem; padding: 1rem; border-radius: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); display: none;">
+                            <!-- Injected via JS -->
+                        </div>
+
+                        <h4 style="font-size:0.85rem; color:#94a3b8; margin-bottom:0.75rem; text-transform:uppercase; letter-spacing:1px;">Route Timeline & Local AQI</h4>
+                        <div id="traffic-segment-timeline" style="display:flex; flex-direction:column; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem;">
+                            <!-- Injected JS Step Timeline -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass map-card" style="margin-bottom: 2rem;">
+                    <h3 style="margin-bottom:1rem;">🗺 Simulation Map</h3>
+                    <div id="map-traffic" style="height: 100%; min-height: 400px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);"></div>
+                </div>
+
+                <!-- TRAFFIC IMPACT CHART -->
+                <div class="glass" id="traffic-segment-chart-card" style="padding: 1.5rem; border-radius: 20px; display: none;">
+                    <h3 style="margin-bottom: 1rem;">🚥 Traffic Impact vs AQI</h3>
+                    <div style="position: relative; height: 250px; width: 100%;">
+                        <canvas id="trafficSegmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Route Network View -->
+        <section id="view-network" class="hidden">
+            <div class="page-header">
+                <p>Interactive city graph showing all RL environment routes, live AQI-weighted edges, and connection distances.</p>
+            </div>
+
+            <!-- Legend + Controls -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                <div style="display:flex; gap:1.25rem; align-items:center; flex-wrap:wrap;">
+                    <span style="font-size:12px; text-transform:uppercase; color:var(--text-secondary); font-weight:600;">Legend</span>
+                    <span style="display:flex; align-items:center; gap:6px; font-size:13px;">
+                        <span style="width:14px; height:14px; border-radius:50%; background:#a855f7; display:inline-block;"></span> Shortest Route
+                    </span>
+                    <span style="display:flex; align-items:center; gap:6px; font-size:13px;">
+                        <span style="width:14px; height:14px; border-radius:50%; background:#10b981; display:inline-block;"></span> Eco Route
+                    </span>
+                    <span style="display:flex; align-items:center; gap:6px; font-size:13px;">
+                        <span style="width:36px; height:3px; background: linear-gradient(90deg,#10b981,#f59e0b,#ef4444); display:inline-block; border-radius:2px;"></span> Edge AQI
+                    </span>
+                </div>
+                <button id="btn-refresh-network" class="btn" style="padding:0.5rem 1.25rem; font-size:13px;">
+                    ↻ Refresh AQI
+                </button>
+            </div>
+
+            <!-- Canvas-based network -->
+            <div class="glass" style="padding:1.5rem; border-radius:20px; position:relative; overflow:hidden;">
+                <h3 style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1.25rem;">📡 Route Network</h3>
+                <div id="network-loading" class="loader"></div>
+                <canvas id="network-canvas" width="900" height="480"
+                    style="width:100%; border-radius:12px; cursor:crosshair; display:block;"></canvas>
+                <div id="network-tooltip"
+                    style="display:none; position:absolute; background:rgba(15,23,42,0.95); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:0.6rem 1rem; font-size:12px; pointer-events:none; z-index:10; min-width:160px;">
+                </div>
+            </div>
+
+            <!-- Edge Info Table -->
+            <div class="glass" style="padding:1.5rem; border-radius:20px; margin-top:1.5rem;">
+                <h3 style="margin-bottom:1rem;">📊 Edge Summary</h3>
+                <div id="network-edge-table" style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr style="color:var(--text-secondary); text-transform:uppercase; font-size:11px;">
+                                <th style="text-align:left; padding:0.5rem 0.75rem;">From</th>
+                                <th style="text-align:left; padding:0.5rem 0.75rem;">To</th>
+                                <th style="text-align:right; padding:0.5rem 0.75rem;">Distance</th>
+                                <th style="text-align:right; padding:0.5rem 0.75rem;">Avg AQI</th>
+                                <th style="text-align:right; padding:0.5rem 0.75rem;">Pollution Wt</th>
+                                <th style="text-align:left; padding:0.5rem 0.75rem;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="network-edge-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks View -->
+        <section id="view-tasks" class="hidden">
+            <div class="page-header" style="margin-bottom: 2rem;">
+                <h2>RL Simulation Engine</h2>
+                <p>Execute the RL agent on OpenEnv evaluation tasks and visualize trajectory metrics.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start;">
+                <!-- Chart Area -->
+                <div class="solid-card" style="padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="margin: 0; font-size: 1.2rem;">Simulation Trajectory</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <select id="sim-task-select" class="control-input" style="width: auto;">
+                            </select>
+                            <button id="btn-run-sim" class="btn btn-primary" style="padding: 0.5rem 1rem;">▶ Run Agent</button>
+                        </div>
+                    </div>
+                    <div id="sim-loading" class="loader hidden"></div>
+                    <div style="position: relative; height: 400px; width: 100%;">
+                        <canvas id="simChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Simulation Event Log -->
+                <div class="solid-card" style="padding: 1.5rem; height: 100%; max-height: 500px; overflow-y: auto;">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Agent Event Log</h3>
+                    <div id="sim-event-log" style="font-family: monospace; font-size: 0.85rem; color: #a1a1aa; display: flex; flex-direction: column; gap: 0.8rem;">
+                        <span style="color: #555;">Ready to simulate...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ISRO PS-3 Dashboard View -->
+        <section id="view-ps3" class="hidden">
+            <!-- PS-3 Hero Banner -->
+            <div class="glass-heavy" style="padding: 2.5rem; margin-bottom: 2rem; border-color: rgba(255, 107, 43, 0.25); position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(255,107,43,0.06), rgba(8,16,32,0.95));">
+                <div style="display: flex; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <span style="padding: 4px 12px; background: rgba(255, 107, 43, 0.12); border: 1px solid rgba(255, 107, 43, 0.35); color: #ff6b2b; border-radius: 20px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px;">🇮🇳 ISRO · BHARATIYA ANTARIKSH HACKATHON 2026</span>
+                    <span style="padding: 4px 12px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; border-radius: 20px; font-size: 0.72rem; font-weight: 700;">PROBLEM STATEMENT 3</span>
+                </div>
+                <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem;">Surface AQI &amp; HCHO Hotspots over India</h1>
+                <p style="color: #94a3b8; font-size: 0.95rem; max-width: 800px; line-height: 1.6;">Development of surface AQI using INSAT-3D + Sentinel-5P satellite data and identification of spatio-temporal HCHO hotspots over India using deep learning (CNN-LSTM). Validated against CPCB ground stations.</p>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="text-align: center;"><div style="font-size: 1.8rem; font-weight: 800; color: #ff6b2b;" id="ps3-stat-aqi">--</div><div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">Peak India AQI</div></div>
+                    <div style="text-align: center;"><div style="font-size: 1.8rem; font-weight: 800; color: #ef4444;" id="ps3-stat-hotspots">--</div><div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">HCHO Hotspots</div></div>
+                    <div style="text-align: center;"><div style="font-size: 1.8rem; font-weight: 800; color: #f59e0b;">0.88</div><div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">CNN-LSTM R²</div></div>
+                    <div style="text-align: center;"><div style="font-size: 1.8rem; font-weight: 800; color: #a78bfa;">r=0.72</div><div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">Fire–HCHO Pearson</div></div>
+                    <div style="text-align: center;"><div style="font-size: 1.8rem; font-weight: 800; color: #38bdf8;">+2d</div><div style="font-size: 0.7rem; color: #64748b; text-transform: uppercase;">Transport Lag</div></div>
+                </div>
+            </div>
+
+            <!-- Controls Row -->
+            <div class="glass" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 1rem 1.5rem;">
+                <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">🗓 Burning Season:</span>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="ps3-season-buttons">
+                    <button class="ps3-season-btn active" data-season="kharif" style="padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,107,0,0.5); background: rgba(255,107,0,0.2); color: #ff6b00; font-family: 'Inter', sans-serif;">🌾 Kharif (Oct–Nov)</button>
+                    <button class="ps3-season-btn" data-season="rabi" style="padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: #94a3b8; font-family: 'Inter', sans-serif;">🌿 Rabi (Apr–May)</button>
+                    <button class="ps3-season-btn" data-season="summer" style="padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: #94a3b8; font-family: 'Inter', sans-serif;">🔥 Summer Forest (Mar–Jun)</button>
+                    <button class="ps3-season-btn" data-season="winter" style="padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.04); color: #94a3b8; font-family: 'Inter', sans-serif;">❄️ Winter Background</button>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 16px; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #94a3b8; cursor: pointer;"><input type="checkbox" id="ps3-layer-wind" style="accent-color:#38bdf8;"> 💨 Wind Vectors</label>
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #94a3b8; cursor: pointer;"><input type="checkbox" id="ps3-layer-source-regions" checked style="accent-color:#ff6b00;"> 📍 Source Regions</label>
+                </div>
+            </div>
+
+            <!-- Main Content Area: Map + Stats -->
+            <div style="display: grid; grid-template-columns: 1fr 360px; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <!-- India Leaflet Map -->
+                <div class="glass" style="padding: 1.5rem; border-color: rgba(255,107,43,0.15); display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h3 style="margin: 0; font-size: 1rem; color: #fff;">🗺 Spatial AQI &amp; HCHO Map — India</h3>
+                        <div style="display: flex; gap: 6px;">
+                            <button id="ps3-map-mode-aqi" class="ps3-map-btn active" style="padding: 5px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; border: 1px solid rgba(255,107,0,0.5); background: rgba(255,107,0,0.2); color: #ff6b00; cursor: pointer;">India AQI</button>
+                            <button id="ps3-map-mode-hcho" class="ps3-map-btn" style="padding: 5px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #94a3b8; cursor: pointer;">HCHO Composite</button>
+                            <button id="ps3-map-mode-no2" class="ps3-map-btn" style="padding: 5px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #94a3b8; cursor: pointer;">NO₂</button>
+                        </div>
+                    </div>
+                    <!-- AQI Legend -->
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 0.68rem; color: #64748b; text-transform: uppercase; font-weight: 600;">India AQI:</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#00e400; color:#000;">Good ≤50</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#92d050; color:#000;">Satisfactory ≤100</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#ffff00; color:#000;">Moderate ≤200</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#ff7e00; color:#fff;">Poor ≤300</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#ff0000; color:#fff;">Very Poor ≤400</span>
+                        <span style="padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; background:#7e0023; color:#fff;">Severe ≤500</span>
+                    </div>
+                    <div id="ps3-map" style="height: 480px; width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06);"></div>
+                    <div style="margin-top: 8px; font-size: 0.65rem; color: #64748b;">📡 Data: INSAT-3D AOD (MOSDAC) + Sentinel-5P TROPOMI + CPCB Ground Stations + ERA5 Reanalysis</div>
+                </div>
+
+                <!-- Side Panels -->
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="glass" style="padding: 14px; border-radius: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4 style="margin: 0; font-size: 0.88rem; color: #fff; font-weight: 700;">📈 City HCHO &amp; AQI Time Series</h4>
+                            <select id="ps3-city-select" style="background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 4px 8px; font-size: 0.72rem; cursor: pointer;">
+                                <option value="Delhi">Delhi</option>
+                                <option value="Kolkata">Kolkata</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Amritsar">Amritsar</option>
+                                <option value="Lucknow">Lucknow</option>
+                                <option value="Patna">Patna</option>
+                                <option value="Chennai">Chennai</option>
+                            </select>
+                        </div>
+                        <div style="position: relative; height: 130px;"><canvas id="ps3-hcho-chart"></canvas></div>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px;">
+                            <span style="font-size: 0.7rem; color: #a78bfa; display: flex; align-items: center; gap: 4px;">■ HCHO (×10¹⁵ mol/cm²)</span>
+                            <span style="font-size: 0.7rem; color: #f87171; display: flex; align-items: center; gap: 4px;">■ Fire Count (FIRMS)</span>
+                        </div>
+                    </div>
+                    <div class="glass" style="padding: 14px; border-radius: 16px;">
+                        <h4 style="margin: 0 0 10px; font-size: 0.88rem; color: #fff; font-weight: 700;">📊 AQI Trend (India CPCB)</h4>
+                        <div style="position: relative; height: 120px;"><canvas id="ps3-aqi-trend-chart"></canvas></div>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px;">
+                            <span style="font-size: 0.7rem; color: #fb923c; display: flex; align-items: center; gap: 4px;">■ India AQI</span>
+                            <span style="font-size: 0.7rem; color: #64748b; display: flex; align-items: center; gap: 4px;">— Moderate (200)</span>
+                        </div>
+                    </div>
+                    <div class="glass" style="padding: 14px; border-radius: 16px;">
+                        <h4 style="margin: 0 0 10px; font-size: 0.88rem; color: #fff; font-weight: 700;">🏙 Multi-City AQI Snapshot</h4>
+                        <div id="ps3-city-aqi-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Fire-HCHO Correlation + Source Regions -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="glass" style="padding: 1.5rem; border-color: rgba(167,139,250,0.15);">
+                    <h3 style="margin: 0 0 6px; font-size: 1rem; color: #fff;">🔥 Fire Activity vs HCHO Enhancement</h3>
+                    <p style="font-size: 0.72rem; color: #64748b; margin: 0 0 14px; line-height: 1.5;">MODIS/VIIRS fire count vs TROPOMI HCHO column — Pearson correlation with lag analysis</p>
+                    <div style="position: relative; height: 200px;"><canvas id="ps3-fire-scatter-chart"></canvas></div>
+                    <div style="margin-top: 14px;">
+                        <h4 style="font-size: 0.78rem; color: var(--text-secondary); margin: 0 0 8px; font-weight: 600;">Lag Cross-Correlation (days)</h4>
+                        <div style="position: relative; height: 100px;"><canvas id="ps3-lag-chart"></canvas></div>
+                        <p style="font-size: 0.68rem; color: #64748b; margin-top: 6px; line-height: 1.5;" id="ps3-correlation-text">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="glass" style="padding: 1.5rem; border-color: rgba(255,107,43,0.15);">
+                    <h3 style="margin: 0 0 6px; font-size: 1rem; color: #fff;">📍 Source Region Classification</h3>
+                    <p style="font-size: 0.72rem; color: #64748b; margin: 0 0 14px; line-height: 1.5;">Major HCHO source regions: Agricultural burning, forest fires, industrial, urban</p>
+                    <div id="ps3-source-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto;"></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: Multi-Pollutant Validation Table -->
+            <div class="glass" style="padding: 1.5rem; border-color: rgba(16,185,129,0.15); margin-bottom: 1.5rem;">
+                <h3 style="margin: 0 0 6px; font-size: 1rem; color: #10b981;">✅ Multi-Pollutant Model Validation (CPCB Ground Truth)</h3>
+                <p style="font-size: 0.72rem; color: #64748b; margin: 0 0 14px; line-height: 1.5;">GWR Baseline vs CNN-LSTM predictions vs CPCB ground stations (10 cities). CNN-LSTM R² &gt; 0.75 ✓</p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #64748b; border-bottom: 1px solid rgba(255,255,255,0.08);">Pollutant</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #64748b; border-bottom: 1px solid rgba(255,255,255,0.08);">Unit</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.08);">GWR RMSE</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.08);">GWR MAE</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.08);">GWR R²</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #10b981; border-bottom: 1px solid rgba(255,255,255,0.08);">CNN-LSTM RMSE</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #10b981; border-bottom: 1px solid rgba(255,255,255,0.08);">CNN-LSTM MAE</th>
+                                <th style="text-align: center; padding: 10px 12px; text-transform: uppercase; font-size: 0.68rem; font-weight: 600; color: #10b981; border-bottom: 1px solid rgba(255,255,255,0.08);">CNN-LSTM R²</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ps3-validation-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ROW 4: Dataset Provenance + Policy Context -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="glass" style="padding: 1.5rem; border-color: rgba(56,189,248,0.15);">
+                    <h3 style="margin: 0 0 14px; font-size: 1rem; color: #38bdf8; font-weight: 700;">🛰️ Multi-Source Dataset Integration</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; border: 1px solid rgba(255,107,43,0.3); background: rgba(255,107,43,0.1); color: #ff6b2b; white-space: nowrap; flex-shrink: 0;">INSAT-3D</span>
+                            <div><div style="font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:3px;">AOD Product (MOSDAC)</div><div style="font-size:0.7rem; color:#64748b; line-height:1.4;">Aerosol Optical Depth → Surface PM2.5 via CNN-LSTM</div></div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; border: 1px solid rgba(167,139,250,0.3); background: rgba(167,139,250,0.1); color: #a78bfa; white-space: nowrap; flex-shrink: 0;">TROPOMI</span>
+                            <div><div style="font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:3px;">Sentinel-5P (ESA/Copernicus)</div><div style="font-size:0.7rem; color:#64748b; line-height:1.4;">NO₂, SO₂, CO, O₃, HCHO column densities</div></div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.1); color: #10b981; white-space: nowrap; flex-shrink: 0;">CPCB</span>
+                            <div><div style="font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:3px;">Ground Stations (CAAQM)</div><div style="font-size:0.7rem; color:#64748b; line-height:1.4;">PM2.5/PM10/NO₂/SO₂/CO/O₃ surface truth (OpenAQ v3)</div></div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.1); color: #ef4444; white-space: nowrap; flex-shrink: 0;">FIRMS</span>
+                            <div><div style="font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:3px;">NASA active fires</div><div style="font-size:0.7rem; color:#64748b; line-height:1.4;">Fire count &amp; FRP for HCHO correlation analysis</div></div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                            <span style="padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; border: 1px solid rgba(56,189,248,0.3); background: rgba(56,189,248,0.1); color: #38bdf8; white-space: nowrap; flex-shrink: 0;">ERA5</span>
+                            <div><div style="font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:3px;">Meteorology (CDS)</div><div style="font-size:0.7rem; color:#64748b; line-height:1.4;">850 hPa wind fields for transport pathway analysis</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass" style="padding: 1.5rem; border-color: rgba(245,158,11,0.15);">
+                    <h3 style="margin: 0 0 14px; font-size: 1rem; color: #fbbf24; font-weight: 700;">🏛 Policy &amp; Scientific Context</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="padding: 12px; border-radius: 8px; border-left: 3px solid #fbbf24; background: rgba(245,158,11,0.05);">
+                            <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px;">🇮🇳 NCAP — National Clean Air Programme</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.55;">India's strategy targeting <strong>20–40% reduction</strong> in PM2.5/PM10 by 2026 in 131 non-attainment cities. Satellite AQI enables real-time monitoring.</div>
+                        </div>
+                        <div style="padding: 12px; border-radius: 8px; border-left: 3px solid #10b981; background: rgba(16,185,129,0.05);">
+                            <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px;">🌐 SDG Target 11.6</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.55;">"Reduce the adverse environmental impact of cities." Satellite AQI extends coverage beyond 100km reach of ground stations.</div>
+                        </div>
+                        <div style="padding: 12px; border-radius: 8px; border-left: 3px solid #a78bfa; background: rgba(167,139,250,0.05);">
+                            <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 5px;">🏙 Chintan Shivir 2.0</div>
+                            <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.55;">Urban climate, air quality, and sustainable development. HCHO hotspot mapping supports city-level source attribution and policy intervention.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
